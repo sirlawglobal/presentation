@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrueMinds TalentFlow LMS - Corporate Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #09090b 0%, #1e1b4b 50%, #020617 100%);
+            overflow-x: hidden;
+            color: white;
+        }
+
+        /* Slide Container */
+        .slides-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 60px;
+            position: relative;
+        }
+
+        /* Glassmorphic Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 48px 64px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 84px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #fff 30%, #a855f7 70%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: 42px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        h2 span.icon {
+            background: linear-gradient(135deg, #a855f7, #06b6d4);
+            padding: 8px;
+            border-radius: 12px;
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #d8b4fe;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 26px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 10px;
+        }
+
+        /* Technical Tags */
+        .tag-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            color: #ccc;
+        }
+
+        /* Grid Layouts */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .card-mini {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .card-mini:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(168,85,247,0.4);
+            transform: translateY(-5px);
+        }
+
+        /* Two Column Layout */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 24px;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #020617;
+            border-radius: 16px;
+            padding: 24px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            color: #94a3b8;
+            font-size: 13px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.05);
+            line-height: 1.5;
+        }
+
+        .code-keyword { color: #f472b6; }
+        .code-method { color: #38bdf8; }
+        .code-comment { color: #475569; }
+
+        /* Navigation */
+        .nav-dots {
+            position: fixed;
+            right: 32px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 16px 0;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-dot.active {
+            background: #a855f7;
+            transform: scale(2);
+            box-shadow: 0 0 15px rgba(168,85,247,0.6);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #a855f7, #06b6d4, #a855f7);
+            background-size: 200% 100%;
+            z-index: 200;
+            animation: gradientMove 3s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        /* Legend Footer */
+        .footer {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* Specific Component Styling */
+        .success-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(34,197,94,0.1);
+            color: #4ade80;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            h1 { font-size: 56px; }
+            .grid-3 { grid-template-columns: 1fr; }
+            .two-columns { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="nav-dots" id="navDots"></div>
+
+    <div class="slides-container" id="slidesContainer">
+        
+        <!-- SLIDE 1: INTRO -->
+        <div class="slide">
+            <div class="glass-card" style="text-align: center;">
+                <div class="tag-row" style="justify-content: center;">
+                    <span class="tag">NESTJS 11</span>
+                    <span class="tag">REACT 19</span>
+                    <span class="tag">MYSQL 8</span>
+                    <span class="tag">TYPESCRIPT</span>
+                </div>
+                <h1>TalentFlow LMS</h1>
+                <p class="subtitle">A Sophisticated, Relational, and Visual-First Education Ecosystem</p>
+                <div style="margin-top: 48px; display: flex; justify-content: center; gap: 40px;">
+                    <div>
+                        <div style="font-size: 32px; font-weight: 800; color: white;">99.9%</div>
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.4);">Delivery Guarantee</div>
+                    </div>
+                    <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
+                    <div>
+                        <div style="font-size: 32px; font-weight: 800; color: white;">0ms</div>
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.4);">Disk Latency</div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span>TrueMinds Internal Presentation</span>
+                    <span>v2.0 Performance Build</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: ARCHITECTURE PHILOSOPHY -->
+        <div class="slide">
+            <div class="glass-card">
+                <h2><span class="icon">🏗️</span> Architectural Philosophy</h2>
+                <p style="color: rgba(255,255,255,0.6); margin-bottom: 32px;">Beyond the standard MVC. We built for reliability and stateless scalability.</p>
+                <div class="grid-3">
+                    <div class="card-mini">
+                        <h3>Modular Core</h3>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">NestJS Modules encapsulate business logic. Auth, Courses, and Collaboration exist in isolation, sharing only strict contracts.</p>
+                    </div>
+                    <div class="card-mini">
+                        <h3>Relation-Dense</h3>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">TypeORM managed MySQL layer. Structured relationships between Users, Enrolled Courses, Modules, and Lessons.</p>
+                    </div>
+                    <div class="card-mini">
+                        <h3>Stateless Media</h3>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Server acts as a buffer. In-memory streaming means we never fill the disk, allowing for infinite horizontal scaling.</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span>Core Engine: Node.js + NestJS + TS</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: THE RELIABILITY LAYER (OUTBOX) -->
+        <div class="slide">
+            <div class="glass-card">
+                <h2><span class="icon">🔄</span> The Reliability Engine</h2>
+                <div class="two-columns">
+                    <div class="left">
+                        <h3>Transactional Outbox Pattern</h3>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 24px;">Traditional APIs fail when external services (SMTP) are down. We don't. We save intent first, then execute.</p>
+                        <div class="code-block">
+                            <span class="code-comment">// src/outbox/outbox.worker.ts</span>
+                            <span class="code-keyword">@Cron</span>(CronExpression.EVERY_5_SECONDS)
+                            <span class="code-keyword">async</span> <span class="code-method">processOutboxMessages</span>() {
+                              <span class="code-comment">// Load pending notifications</span>
+                              <span class="code-keyword">const</span> msgs = <span class="code-keyword">await</span> repo.find({ status: PENDING });
+                              <span class="code-comment">// Process with automatic retries</span>
+                              <span class="code-keyword">for</span> (<span class="code-keyword">const</span> msg <span class="code-keyword">of</span> msgs) {
+                                <span class="code-keyword">await</span> notificationService.deliver(msg);
+                              }
+                            }
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="card-mini" style="background: rgba(168,85,247,0.05); border-color: rgba(168,85,247,0.2);">
+                            <div class="success-pill">✓ Guaranteed Delivery</div>
+                            <h3 style="margin-top: 16px;">How It Works</h3>
+                            <ul style="font-size: 14px; color: rgba(255,255,255,0.5); list-style: none; display: flex; flex-direction: column; gap: 12px;">
+                                <li>✨ <strong>Atomic Transaction:</strong> User created + OTP intent saved in ONE DB call.</li>
+                                <li>🚀 <strong>Async Execution:</strong> User gets success response instantly.</li>
+                                <li>🛡️ <strong>Fault Tolerant:</strong> If SMTP is down, worker retries up to 5 times.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: FRONTEND: VISUAL EXCELLENCE -->
+        <div class="slide">
+            <div class="glass-card">
+                <h2><span class="icon">🎨</span> Frontend: The "Visual-First" UI</h2>
+                <div class="two-columns">
+                    <div class="left">
+                        <div class="tag-row">
+                            <span class="tag">FRAMER MOTION</span>
+                            <span class="tag">ZUSTAND</span>
+                            <span class="tag">TAILWIND</span>
+                        </div>
+                        <h3>Premium Glassmorphism</h3>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 24px;">Built with React 19 to provide a futuristic, translucent interface that motivates learning through aesthetic pleasure.</p>
+                        
+                        <div class="card-mini" style="margin-top: 24px;">
+                            <div style="font-size: 13px; font-weight: 600; color: #a855f7; margin-bottom: 8px;">PERFORMANCE METRICS</div>
+                            <div style="display: flex; gap: 20px;">
+                                <div><strong style="color: white;">60 FPS</strong> <span style="font-size: 11px; opacity: 0.5;">Transitions</span></div>
+                                <div><strong style="color: white;">Zero</strong> <span style="font-size: 11px; opacity: 0.5;">Layout Shifts</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="code-block">
+                            <span class="code-comment">// Modular State with Zustand</span>
+                            <span class="code-keyword">const</span> useAuthStore = <span class="code-method">create</span>((set) => ({
+                              user: <span class="code-keyword">null</span>,
+                              setUser: (u) => <span class="code-method">set</span>({ user: u }),
+                              logout: () => <span class="code-method">set</span>({ user: <span class="code-keyword">null</span> }),
+                            }));
+                        </div>
+                        <ul style="margin-top: 24px; font-size: 14px; color: rgba(255,255,255,0.5); list-style: none; padding-left: 20px;">
+                            <li style="margin-bottom: 10px;">• 📱 <strong>Fully Responsive:</strong> Optimized for Learning on Go.</li>
+                            <li style="margin-bottom: 10px;">• 🎥 <strong>Custom Viewer:</strong> Specialized high-focus lesson player.</li>
+                            <li style="margin-bottom: 10px;">• ✨ <strong>Micro-Interactions:</strong> Haptic-like visual feedback.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: COLLABORATION & COMMUNITY -->
+        <div class="slide">
+            <div class="glass-card">
+                <h2><span class="icon">💬</span> Collaboration Module</h2>
+                <p style="color: rgba(255,255,255,0.6); margin-bottom: 32px;">Learning isn't solitary. We've built the tools for community interaction.</p>
+                <div class="grid-3">
+                    <div class="card-mini">
+                        <div style="font-size: 24px; margin-bottom: 12px;">📂</div>
+                        <h3>Forum Threads</h3>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Course-specific discussion boards. Threading and replies with rich content support.</p>
+                    </div>
+                    <div class="card-mini">
+                        <div style="font-size: 24px; margin-bottom: 12px;">✉️</div>
+                        <h3>Direct Messaging</h3>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Peer-to-peer and Student-to-Instructor messaging. Private, secure, and instant.</p>
+                    </div>
+                    <div class="card-mini">
+                        <div style="font-size: 24px; margin-bottom: 12px;">👁️</div>
+                        <h3>Read-State Tracking</h3>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Real-time status of read/unread messages to keep the conversation flowing.</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span>Path: /api/v1/collaboration</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: MEDIA STREAMING (CLOUDINARY) -->
+        <div class="slide">
+            <div class="glass-card">
+                <h2><span class="icon">🎥</span> Stateless Media Streaming</h2>
+                <div class="two-columns">
+                    <div class="left">
+                        <h3>The Buffer-Pipe Strategy</h3>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 24px;">We use <code>streamifier</code> to bridge the gap between incoming request buffers and the Cloudinary SDK.</p>
+                        <ul style="font-size: 14px; color: rgba(255,255,255,0.5); list-style: none; display: flex; flex-direction: column; gap: 16px;">
+                            <li>✅ <strong>Zero Local Storage:</strong> Files never touch the backend's hard drive.</li>
+                            <li>✅ <strong>Max Throughput:</strong> Optimized for large video uploads (up to 100MB).</li>
+                            <li>✅ <strong>Security:</strong> All uploads are verified for MIME-type and role permissions.</li>
+                        </ul>
+                    </div>
+                    <div class="right">
+                        <div class="code-block">
+                            <span class="code-comment">// src/cloudinary/cloudinary.service.ts</span>
+                            <span class="code-keyword">const</span> stream = cloudinary.uploader.<span class="code-method">upload_stream</span>(
+                              (error, res) => { <span class="code-comment">/* Handle Result */</span> }
+                            );
+                            streamifier.<span class="code-method">createReadStream</span>(file.buffer).<span class="code-method">pipe</span>(stream);
+                        </div>
+                        <div style="margin-top: 20px; display: flex; justify-content: space-around;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 20px; font-weight: 700;">MP4 / MKV</div>
+                                <div style="font-size: 11px; opacity: 0.5;">Supported</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 20px; font-weight: 700;">HTTPS</div>
+                                <div style="font-size: 11px; opacity: 0.5;">Encrypted Delivery</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: ASSIGNMENTS & PROGRESS -->
+        <div class="slide">
+            <div class="glass-card">
+                <h2><span class="icon">📝</span> Assessment & Tracking</h2>
+                <div class="two-columns">
+                    <div class="card-mini">
+                        <h3>The Grading Cycle</h3>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.5); margin: 12px 0;">A full ecosystem for task management:</p>
+                        <ul style="font-size: 13px; color: rgba(255,255,255,0.4); list-style: none;">
+                            <li style="margin-bottom: 8px;">🔹 <strong>Creation:</strong> Instructors build point-based tasks.</li>
+                            <li style="margin-bottom: 8px;">🔹 <strong>Submission:</strong> Students upload documents securely.</li>
+                            <li style="margin-bottom: 8px;">🔹 <strong>Grading:</strong> Instructor UI with feedback & score input.</li>
+                        </ul>
+                    </div>
+                    <div class="card-mini">
+                        <h3>Progress Analytics</h3>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.5); margin: 12px 0;">Data-driven learning insights:</p>
+                        <ul style="font-size: 13px; color: rgba(255,255,255,0.4); list-style: none;">
+                            <li style="margin-bottom: 8px;">📈 <strong>Lesson Markers:</strong> Instant state persistence on completion.</li>
+                            <li style="margin-bottom: 8px;">📈 <strong>Global Dashboard:</strong> Role-based stats for engagement.</li>
+                            <li style="margin-bottom: 8px;">📈 <strong>Course Health:</strong> Aggregated progress for instructors.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: SECURITY & COMPLIANCE -->
+        <div class="slide">
+            <div class="glass-card">
+                <h2><span class="icon">🛡️</span> Enterprise-Grade Security</h2>
+                <div class="grid-3">
+                    <div class="card-mini">
+                        <h3>Identity Protection</h3>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Stateless JWT auth with automatic token lifecycle management and secure Bcrypt hashing (rounds: 10).</p>
+                    </div>
+                    <div class="card-mini">
+                        <h3>Hierarchical Guards</h3>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Nested AuthGuards & RoleGuards. Multi-role support for Student, Instructor, and Admin permissions.</p>
+                    </div>
+                    <div class="card-mini">
+                        <h3>OTP Purpose Segregation</h3>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Context-aware verification codes. RESET_PASSWORD OTP cannot be used for EMAIL_VERIFICATION.</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span>Validation Engine: class-validator + ValidationPipe</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: THE FUTURE (ROADMAP) -->
+        <div class="slide">
+            <div class="glass-card">
+                <h2><span class="icon">🚀</span> Next Horizons</h2>
+                <div class="grid-3">
+                    <div class="card-mini" style="border-left: 4px solid #a855f7;">
+                        <h3 style="color: white; font-size: 18px;">AI-Powered Quizzing</h3>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Automatic generation of mock tests using video transcript analysis via LLM integration.</p>
+                    </div>
+                    <div class="card-mini" style="border-left: 4px solid #06b6d4;">
+                        <h3 style="color: white; font-size: 18px;">NFT Certification</h3>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Tokenizing course completion on-chain for verifiable, permanent educational credentials.</p>
+                    </div>
+                    <div class="card-mini" style="border-left: 4px solid #f472b6;">
+                        <h3 style="color: white; font-size: 18px;">Live Mentorship</h3>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.5);">1-on-1 WebRTC video mentorship integration directly within the student workspace.</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span style="color: #a855f7; font-weight: 600;">"TrueMinds: Building the Infrastructure of Knowledge."</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const container = document.getElementById('slidesContainer');
+        const progressBar = document.getElementById('progressBar');
+        const navDots = document.getElementById('navDots');
+
+        // Create navigation dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('nav-dot');
+            dot.addEventListener('click', () => {
+                slides[index].scrollIntoView({ behavior: 'smooth' });
+            });
+            navDots.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.nav-dot');
+
+        function updateProgress() {
+            const scrollTop = container.scrollTop;
+            const scrollHeight = container.scrollHeight - container.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            progressBar.style.width = progress + '%';
+
+            // Update active dot
+            const slideHeight = slides[0].clientHeight;
+            const activeIndex = Math.round(scrollTop / slideHeight);
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === activeIndex);
+            });
+        }
+
+        container.addEventListener('scroll', updateProgress);
+        updateProgress();
+    </script>
+</body>
+</html>
