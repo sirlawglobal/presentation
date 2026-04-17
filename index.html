@@ -100,8 +100,9 @@
 
         .subtitle {
             font-size: 26px;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.85); /* Increased contrast */
             margin-top: 10px;
+            font-weight: 500;
         }
 
         /* Technical Tags */
@@ -287,15 +288,15 @@
                 <div class="grid-3">
                     <div class="card-mini">
                         <h3>Modular Core</h3>
-                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">NestJS Modules encapsulate business logic. Auth, Courses, and Collaboration exist in isolation, sharing only strict contracts.</p>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.85);">NestJS Modules encapsulate business logic. Auth, Courses, and Collaboration exist in isolation, sharing only strict contracts via DTOs.</p>
                     </div>
                     <div class="card-mini">
                         <h3>Relation-Dense</h3>
-                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">TypeORM managed MySQL layer. Structured relationships between Users, Enrolled Courses, Modules, and Lessons.</p>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.85);">TypeORM managed MySQL layer. Structured relationships between Users, Enrolled Courses, Modules, Lessons, and Shared Discussions.</p>
                     </div>
                     <div class="card-mini">
                         <h3>Stateless Media</h3>
-                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Server acts as a buffer. In-memory streaming means we never fill the disk, allowing for infinite horizontal scaling.</p>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.85);">Server acts as a buffer. In-memory streaming using <code>streamifier</code> means we never fill the disk, allowing for infinite horizontal scaling.</p>
                     </div>
                 </div>
                 <div class="footer">
@@ -311,7 +312,7 @@
                 <div class="two-columns">
                     <div class="left">
                         <h3>Transactional Outbox Pattern</h3>
-                        <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 24px;">Traditional APIs fail when external services (SMTP) are down. We don't. We save intent first, then execute.</p>
+                        <p style="color: rgba(255,255,255,0.85); font-size: 15px; margin-bottom: 24px;">Traditional APIs fail when external services (SMTP via Brevo) are down. We don't. We save intent first, then execute with cron-based retry logic.</p>
                         <div class="code-block">
                             <span class="code-comment">// src/outbox/outbox.worker.ts</span>
                             <span class="code-keyword">@Cron</span>(CronExpression.EVERY_5_SECONDS)
@@ -332,7 +333,7 @@
                             <ul style="font-size: 14px; color: rgba(255,255,255,0.5); list-style: none; display: flex; flex-direction: column; gap: 12px;">
                                 <li>✨ <strong>Atomic Transaction:</strong> User created + OTP intent saved in ONE DB call.</li>
                                 <li>🚀 <strong>Async Execution:</strong> User gets success response instantly.</li>
-                                <li>🛡️ <strong>Fault Tolerant:</strong> If SMTP is down, worker retries up to 5 times.</li>
+                                <li>🛡️ <strong>Fault Tolerant:</strong> If Brevo API is down, worker retries up to 5 times before failing.</li>
                             </ul>
                         </div>
                     </div>
@@ -352,7 +353,7 @@
                             <span class="tag">TAILWIND</span>
                         </div>
                         <h3>Premium Glassmorphism</h3>
-                        <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 24px;">Built with React 19 to provide a futuristic, translucent interface that motivates learning through aesthetic pleasure.</p>
+                        <p style="color: rgba(255,255,255,0.85); font-size: 15px; margin-bottom: 24px;">Built with React 19 to provide a futuristic, translucent interface that motivates learning through aesthetic pleasure.</p>
                         
                         <div class="card-mini" style="margin-top: 24px;">
                             <div style="font-size: 13px; font-weight: 600; color: #a855f7; margin-bottom: 8px;">PERFORMANCE METRICS</div>
@@ -385,38 +386,72 @@
         <div class="slide">
             <div class="glass-card">
                 <h2><span class="icon">💬</span> Collaboration & Messaging</h2>
-                <p style="color: rgba(255,255,255,0.6); margin-bottom: 32px;">Learning isn't solitary. Built-in forum-style messaging for total course engagement.</p>
+                <p style="color: rgba(255,255,255,0.85); margin-bottom: 32px;">Learning isn't solitary. Built-in forum-style messaging for total course engagement and instructor support.</p>
                 <div class="grid-3">
                     <div class="card-mini">
                         <div style="font-size: 24px; margin-bottom: 12px;">📂</div>
                         <h3>Discussion Threads</h3>
-                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Course-specific forums allow students to post questions and instructors to provide validated answers.</p>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.8);">Course-specific forums allow students to post questions and instructors to provide validated answers.</p>
                     </div>
                     <div class="card-mini">
                         <div style="font-size: 24px; margin-bottom: 12px;">↪️</div>
                         <h3>Deep Threading</h3>
-                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">The system supports a clean parent-child relationship for replies, maintaining context throughout the learning lifecycle.</p>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.8);">The system supports a clean parent-child relationship (TypeORM Adjacency List) for replies, maintaining context.</p>
                     </div>
                     <div class="card-mini">
                         <div style="font-size: 24px; margin-bottom: 12px;">🛡️</div>
                         <h3>Access Security</h3>
-                        <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Built-in verification ensures only enrolled students and certified instructors can view or post to course messages.</p>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.8);">Built-in verification ensures only enrolled students and certified instructors can view or post to course messages.</p>
                     </div>
                 </div>
                 <div class="footer">
-                    <span>Implementation: Discussion & Reply Entities via TypeORM</span>
+                    <span>Implementation: Discussion & Reply Entities via TypeORM Relations</span>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 6: MEDIA STREAMING (CLOUDINARY) -->
+        <!-- SLIDE 6: THE TALENT SHOWCASE -->
+        <div class="slide">
+            <div class="glass-card">
+                <h2><span class="icon">✨</span> The Talent Showcase Hub</h2>
+                <div class="two-columns">
+                    <div class="left">
+                        <h3>Beyond Education: Community</h3>
+                        <p style="color: rgba(255,255,255,0.85); font-size: 15px; margin-bottom: 24px;">TalentFlow serves as a digital portfolio for our interns and contributors. A central directory where skills are highlighted and profiles are celebrated.</p>
+                        <div class="card-mini" style="background: rgba(6,182,212,0.05); border-color: rgba(6,182,212,0.2);">
+                            <div style="font-size: 13px; font-weight: 600; color: #06b6d4; margin-bottom: 8px;">CORE METRICS</div>
+                            <ul style="font-size: 13px; color: rgba(255,255,255,0.8); list-style: none; padding: 0;">
+                                <li>👤 <strong>Unified Profiles:</strong> Dynamic avatars + track badges.</li>
+                                <li>🛤️ <strong>Specialized Tracks:</strong> FE, BE, UI/UX, PM, and more.</li>
+                                <li>🌍 <strong>Cloudinary Integrated:</strong> High-perf profile delivery.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="right" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div class="code-block">
+                            <span class="code-comment">// team-members.service.ts</span>
+                            <span class="code-keyword">async</span> <span class="code-method">create</span>(dto: CreateTeamMemberDto, file) {
+                               <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> cloudinary.<span class="code-method">uploadFile</span>(file);
+                               <span class="code-keyword">return</span> repo.<span class="code-method">save</span>({ ...dto, profilePicture: result.url });
+                            }
+                        </div>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.5);">"TalentFlow is shaped by a community of passionate interns at Trueminds Ltd. Together, we build the future of learning."</p>
+                    </div>
+                </div>
+                <div class="footer">
+                    <span>Component: TeamsPage.tsx + TeamMembersModule</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: MEDIA STREAMING (CLOUDINARY) -->
         <div class="slide">
             <div class="glass-card">
                 <h2><span class="icon">🎥</span> Stateless Media Streaming</h2>
                 <div class="two-columns">
                     <div class="left">
                         <h3>The Buffer-Pipe Strategy</h3>
-                        <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 24px;">We use <code>streamifier</code> to bridge the gap between incoming request buffers and the Cloudinary SDK.</p>
+                        <p style="color: rgba(255,255,255,0.85); font-size: 15px; margin-bottom: 24px;">We use <code>streamifier</code> to bridge the gap between incoming request buffers and the Cloudinary SDK.</p>
                         <ul style="font-size: 14px; color: rgba(255,255,255,0.5); list-style: none; display: flex; flex-direction: column; gap: 16px;">
                             <li>✅ <strong>Zero Local Storage:</strong> Files never touch the backend's hard drive.</li>
                             <li>✅ <strong>Max Throughput:</strong> Optimized for large video uploads (up to 100MB).</li>
@@ -446,7 +481,7 @@
             </div>
         </div>
 
-        <!-- SLIDE 7: ASSIGNMENTS & PROGRESS -->
+        <!-- SLIDE 8: ASSIGNMENTS & PROGRESS -->
         <div class="slide">
             <div class="glass-card">
                 <h2><span class="icon">📝</span> Assessment & Tracking</h2>
@@ -473,11 +508,11 @@
             </div>
         </div>
 
-        <!-- SLIDE 8: THE ANALYTICS INTELLIGENCE -->
+        <!-- SLIDE 9: THE ANALYTICS INTELLIGENCE -->
         <div class="slide">
             <div class="glass-card">
                 <h2><span class="icon">📊</span> The Analytics Intelligence</h2>
-                <p style="color: rgba(255,255,255,0.6); margin-bottom: 32px;">Real-time decision making through role-aware data visualization engine.</p>
+                <p style="color: rgba(255,255,255,0.85); margin-bottom: 32px;">Real-time decision making through role-aware data visualization engine.</p>
                 <div class="grid-3">
                     <div class="card-mini" style="border-top: 3px solid #00f2fe;">
                         <h3 style="color: #00f2fe;">Admin Overlord</h3>
@@ -498,22 +533,22 @@
             </div>
         </div>
 
-        <!-- SLIDE 9: SECURITY & COMPLIANCE -->
+        <!-- SLIDE 10: SECURITY & COMPLIANCE -->
         <div class="slide">
             <div class="glass-card">
                 <h2><span class="icon">🛡️</span> Enterprise-Grade Security</h2>
                 <div class="grid-3">
                     <div class="card-mini">
-                        <h3>Identity Protection</h3>
-                        <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Stateless JWT auth with automatic token lifecycle management and secure Bcrypt hashing (rounds: 10).</p>
+                        <h3>Input Validation</h3>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.85);">Global <code>ValidationPipe</code> using <code>class-validator</code>. Every request is sanitized and verified against strict DTO schemas before execution.</p>
                     </div>
                     <div class="card-mini">
                         <h3>Hierarchical Guards</h3>
-                        <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Nested AuthGuards & RoleGuards. Multi-role support for Student, Instructor, and Admin permissions.</p>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.85);">Nested AuthGuards & RoleGuards. Multi-role support for Student, Instructor, and Admin permissions with context-aware access.</p>
                     </div>
                     <div class="card-mini">
-                        <h3>OTP Purpose Segregation</h3>
-                        <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Context-aware verification codes. RESET_PASSWORD OTP cannot be used for EMAIL_VERIFICATION.</p>
+                        <h3>Identity Lifecycle</h3>
+                        <p style="font-size: 13px; color: rgba(255,255,255,0.85);">Stateless JWT auth with secure Bcrypt hashing. Purpose-aware OTP (RESET_PASSWORD vs EMAIL_VERIFICATION) ensures high-integrity flows.</p>
                     </div>
                 </div>
                 <div class="footer">
@@ -522,7 +557,7 @@
             </div>
         </div>
 
-        <!-- SLIDE 10: THE FUTURE (ROADMAP) -->
+        <!-- SLIDE 11: THE FUTURE (ROADMAP) -->
         <div class="slide">
             <div class="glass-card">
                 <h2><span class="icon">🚀</span> Next Horizons</h2>
